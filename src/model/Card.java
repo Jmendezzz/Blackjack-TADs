@@ -3,13 +3,13 @@ package model;
 public class Card {
     private String name;
     private String suit;
-    private int pointValue;
+    private int value;
     private boolean isFaceUp;
 
     public Card(String name, String suit, int pointValue) {
         this.name = name;
         this.suit = suit;
-        this.pointValue = pointValue;
+        this.value = pointValue;
         this.isFaceUp = false;
     }
 
@@ -21,8 +21,8 @@ public class Card {
         return suit;
     }
 
-    public int getPointValue() {
-        return pointValue;
+    public int getValue() {
+        return value;
     }
 
     public boolean isFaceUp() {
@@ -33,10 +33,6 @@ public class Card {
         isFaceUp = faceUp;
     }
 
-    public String getRank() {
-        // Devuelve el valor de la carta "2", "A", "K"
-        return name.split(" ")[0];
-    }
 
     @Override
     public String toString() {
