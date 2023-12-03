@@ -1,10 +1,9 @@
 import client.BlackjackClient;
 
+import java.io.IOException;
+
 public class BlackjackGame {
-    public static void main(String[] args) {
-        // Example usage
-        BlackjackClient client = new BlackjackClient("https://violence-give-uganda-sentence.trycloudflare.com/");
-        client.sendMessage("Hello, server!");
-        client.close();
+    public static void main(String[] args) throws IOException {
+        BlackjackClient client = new BlackjackClient("localhost", 8080);
     }
 }
