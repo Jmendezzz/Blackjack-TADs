@@ -14,23 +14,25 @@ public class BlackjackMatch{
       Thread thread = new Thread(playerSocket::waiting);
       thread.start();
     }
+    startMatch();
   }
 
   public void startMatch(){
-    sendToAll("Starting match...");
-    sendToAll("Players:");
+    StringBuilder message = new StringBuilder("Iniciando partida... \n" +
+                                              "Jugadores: \n");
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
-      System.out.println(playerSocket.getPlayer().getName());
-      sendToAll(playerSocket.getPlayer().getName());
+      message.append(playerSocket.getPlayer().getName()).append("\n");
     }
 
+    sendToAll(message.toString());
   }
   public void sendToAll(String message){
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       try {
         playerSocket.getDataOutputStream().writeUTF(message);
+        playerSocket.getDataOutputStream().flush();
       } catch (Exception e) {
         System.out.println("Error sending message to client: " + e);
       }
