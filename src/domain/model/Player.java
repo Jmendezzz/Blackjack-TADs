@@ -34,12 +34,15 @@ public class Player {
     setHandValue();
     return handValue;
   }
-  public Double setBet(Double amount) {
-    if (amount > cash) {
+  public void setBet(Double bet) {
+    this.bet = bet;
+  }
+  public Double Bet() {
+    if (bet > cash) {
       return null;
     }
-    cash -= amount;
-    return amount;
+    cash -= bet;
+    return bet;
   }
   public Double getBet() {
     return bet;

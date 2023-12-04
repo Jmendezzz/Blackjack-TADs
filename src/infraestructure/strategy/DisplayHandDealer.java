@@ -4,21 +4,22 @@ import datastructures.Node;
 import datastructures.Stack;
 import domain.model.Card;
 
-public class DisplayHandDealer implements DisplayHand{
+public class DisplayHandDealer implements DisplayHand {
   @Override
   public String displayHand(Stack<Card> hand) {
     Node<Card> current = hand.getTop();
     StringBuilder sb = new StringBuilder();
+    sb.append("-----------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < hand.getSize(); i++) {
       if (current.getData().isFaceUp()) {
-        sb.append("│                          " + current.getData().toString() + " ");
+        sb.append(current.getData().toString());
+        sb.append(" | ");
       } else {
-        sb.append("│ Face Down ");
+        sb.append("Face Down | ");
       }
       current = current.getNext();
     }
-    sb.append("│");
+    sb.append("\n-----------------------------------------------------------------------------------------------\n");
     return sb.toString();
-
   }
 }

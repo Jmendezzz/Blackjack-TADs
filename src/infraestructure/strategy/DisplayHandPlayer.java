@@ -9,11 +9,13 @@ public class DisplayHandPlayer implements DisplayHand{
   public String displayHand(Stack<Card> hand) {
     Node<Card> current = hand.getTop();
     StringBuilder sb = new StringBuilder();
+    sb.append("-----------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < hand.getSize(); i++) {
-        sb.append("│ " + current.getData().toString() + " ");
-        current = current.getNext();
-      }
-    sb.append("│");
+      sb.append(current.getData().toString());
+      sb.append(" | ");
+      current = current.getNext();
+    }
+    sb.append("\n-----------------------------------------------------------------------------------------------\n");
     return sb.toString();
   }
 }
