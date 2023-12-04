@@ -1,4 +1,6 @@
-package model;
+package domain.model;
+
+import domain.enums.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,17 +16,14 @@ public class Deck {
 
     private List<Card> generateDeck() {
         List<Card> deck = new ArrayList<>();
-        String[] suits = {"Corazones", "Diamantes", "Tréboles", "Picas"};
         String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
-
-        for (String suit : suits) {
+        for (Suit suit : Suit.values()) {
             for (String rank : ranks) {
                 int value = getValue(rank);
                 String cardName = rank + " de " + suit;
                 deck.add(new Card(cardName, suit, value));
             }
         }
-
         return deck;
     }
 

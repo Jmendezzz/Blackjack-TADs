@@ -1,9 +1,6 @@
-package model;
+package domain.model;
 
 import datastructures.Stack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Dealer {
     private Stack<Card> hand;

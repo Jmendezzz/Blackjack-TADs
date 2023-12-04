@@ -1,6 +1,6 @@
 package datastructures;
 
-import model.Card;
+import domain.model.Card;
 
 public class Stack<T> {
     private Node<T> top;
@@ -22,7 +22,7 @@ public class Stack<T> {
         Node<T> current = top;
         while (current != null) {
             Card card = (Card) current.getData();
-            if (card.getName().equalsIgnoreCase("As")){
+            if (card.getName().equalsIgnoreCase("A")){
                 if (total + 11 > 21) {
                     total += 1;
                 } else {

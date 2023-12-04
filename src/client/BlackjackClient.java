@@ -1,10 +1,9 @@
 package client;
 
-import model.Player;
+import domain.model.Player;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URI;
 import java.util.Scanner;
 
 public class BlackjackClient {

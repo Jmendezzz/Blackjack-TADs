@@ -1,12 +1,14 @@
-package model;
+package domain.model;
+
+import domain.enums.Suit;
 
 public class Card {
     private String name;
-    private String suit;
+    private Suit suit;
     private int value;
     private boolean isFaceUp;
 
-    public Card(String name, String suit, int pointValue) {
+    public Card(String name, Suit suit, int pointValue) {
         this.name = name;
         this.suit = suit;
         this.value = pointValue;
@@ -17,7 +19,7 @@ public class Card {
         return name;
     }
 
-    public String getSuit() {
+    public Suit getSuit() {
         return suit;
     }
 

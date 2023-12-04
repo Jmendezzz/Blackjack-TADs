@@ -1,6 +1,6 @@
 package server.sockets;
 
-import model.Player;
+import domain.model.Player;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
