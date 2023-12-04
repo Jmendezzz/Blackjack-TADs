@@ -17,6 +17,12 @@ public class Stack<T> {
         top = top.getNext();
         return data;
     }
+    public T peek() {
+        if (top == null) {
+            return null;
+        }
+        return top.getData();
+    }
     public int getTotalValue() {
         int total = 0;
         Node<T> current = top;
@@ -36,7 +42,7 @@ public class Stack<T> {
         }
         return total;
     }
-    public void delete() {
+    public void clear() {
         top = null;
     }
 }

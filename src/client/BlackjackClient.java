@@ -42,6 +42,9 @@ public class BlackjackClient {
         this.player = new Player(name);
         this.player.setCash(500.0);
     }
+    public Player getPlayer() {
+        return player;
+    }
     private void listenToServer() {
         try {
             while (true) {

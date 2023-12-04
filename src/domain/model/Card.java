@@ -3,8 +3,8 @@ package domain.model;
 import domain.enums.Suit;
 
 public class Card {
-    private String name;
-    private Suit suit;
+    private final String name;
+    private final Suit suit;
     private int value;
     private boolean isFaceUp;
 
@@ -27,6 +27,10 @@ public class Card {
         return value;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public boolean isFaceUp() {
         return isFaceUp;
     }
@@ -34,8 +38,6 @@ public class Card {
     public void setFaceUp(boolean faceUp) {
         isFaceUp = faceUp;
     }
-
-
     @Override
     public String toString() {
         return name;

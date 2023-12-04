@@ -1,5 +1,6 @@
 package domain.model;
 
+import datastructures.Stack;
 import domain.enums.Suit;
 
 import java.util.ArrayList;
@@ -7,11 +8,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-    private List<Card> cards;
-
+    private final List<Card> cards;
+    private final Stack<Card> cardStack;
     public Deck() {
+        this.cardStack = new Stack<>();
         this.cards = generateDeck();
         shuffle();
+        for (Card card : cards) {
+            cardStack.push(card);
+        }
     }
 
     private List<Card> generateDeck() {
@@ -28,16 +33,15 @@ public class Deck {
     }
 
     private int getValue(String rank) {
-        switch (rank) {
-            case "A":
-                return 11;
-            case "K":
-            case "Q":
-            case "J":
-                return 10;
-            default:
-                return Integer.parseInt(rank);
-        }
+        return switch (rank) {
+            case "A" -> 11;
+            case "K", "Q", "J" -> 10;
+            default -> Integer.parseInt(rank);
+        };
+    }
+
+    public Stack<Card> getCardStack() {
+        return cardStack;
     }
 
     public void shuffle() {
@@ -45,10 +49,18 @@ public class Deck {
     }
 
     public Card dealCard() {
-        if (cards.isEmpty()) {
-            throw new IllegalStateException("La baraja esta vacia, no se pueden repartir mas cartas.");
+        if (cardStack.peek() == null) {
+            reset();
         }
-        return cards.remove(0);
+        return cardStack.pop();
+    }
+
+    public void reset() {
+        cardStack.clear();
+        shuffle();
+        for (Card card : cards) {
+            cardStack.push(card);
+        }
     }
 
     public int size() {
