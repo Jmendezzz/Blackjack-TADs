@@ -56,7 +56,7 @@ public class BlackjackClient {
         }
     }
     private void handleServerMessage(String message) {
-        System.out.println("Server: " + message);
+        System.out.println(message);
     }
     public void close() {
         try {

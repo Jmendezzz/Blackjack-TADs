@@ -1,14 +1,18 @@
 package domain.model;
 
 import datastructures.Stack;
+import infraestructure.strategy.DisplayHand;
+import infraestructure.strategy.DisplayHandPlayer;
 
 public class Player {
   private String name;
   private Double cash;
-  private final Stack<Card> hand;
+  private Stack<Card> hand;
   private int handValue;
   private Double bet;
+  private DisplayHand displayHandStrategy;
   public Player(String name) {
+    this.displayHandStrategy = new DisplayHandPlayer();
     this.hand = new Stack<>();
     this.name = name;
     this.bet = 0.0;
@@ -58,6 +62,10 @@ public class Player {
   }
   public void clearHand() {
     hand.clear();
+  }
+
+  public String displayHand() {
+    return displayHandStrategy.displayHand(hand);
   }
   @Override
   public String toString() {

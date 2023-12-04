@@ -2,17 +2,20 @@ package server;
 
 import datastructures.CircularLinkedList;
 import datastructures.Node;
-import datastructures.Stack;
-import domain.model.Card;
-import domain.model.Player;
+import domain.model.Dealer;
 import server.sockets.PlayerSocket;
+import server.utils.BlackjackTableUtil;
 
 public class BlackjackMatch{
 
   private final CircularLinkedList<PlayerSocket> players;
+  private Node<PlayerSocket> currentPlayer;
+  private final Dealer dealer;
 
   BlackjackMatch(CircularLinkedList<PlayerSocket> players) {
     this.players = players;
+    this.dealer = new Dealer();
+    this.currentPlayer = players.getHead();
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       Thread thread = new Thread(playerSocket::waiting);
@@ -22,8 +25,25 @@ public class BlackjackMatch{
   }
 
   public void startMatch(){
+    sendWelcomeMessageToPlayers();
+    dealCardsToPlayers();
+  }
+
+  private void dealCardsToPlayers(){
+    for (int i = 0; i < players.size() * 2; i++) {
+      currentPlayer.getData().getPlayer().receiveCard(dealer.deal());
+      currentPlayer = currentPlayer.getNext();
+      if(i == players.size() - 1 || i == players.size() * 2 - 1){
+        dealer.receiveCard(dealer.deal());
+      }
+      sendToAll(BlackjackTableUtil.displayTable(dealer, players));
+    }
+  }
+
+
+  private void sendWelcomeMessageToPlayers(){
     StringBuilder message = new StringBuilder("Iniciando partida... \n" +
-                                              "Jugadores: \n");
+            "Jugadores: \n");
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       message.append(playerSocket.getPlayer().getName()).append("\n");
@@ -31,7 +51,8 @@ public class BlackjackMatch{
 
     sendToAll(message.toString());
   }
-  public void sendToAll(String message){
+
+  private void sendToAll(String message){
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       try {
@@ -41,52 +62,6 @@ public class BlackjackMatch{
         System.out.println("Error sending message to client: " + e);
       }
     }
-  }
-
-  private void displayTable() {
-    //TODO:
-    //clearConsole();
-
-    System.out.println("  ┌───────────────────────────────────────────────────────────────────────┐");
-    System.out.println("  │                         Blackjack Table                              │");
-    System.out.println("  └───────────────────────────────────────────────────────────────────────┘");
-    System.out.println("   ┌─────────────────────────────────────────────────────────────────────┐");
-    System.out.println("   │                          Dealer                                     │");
-    System.out.println("   │                         ┌───────────┐                               │");
-    displayHand(dealer);
-    System.out.println("   │                         └───────────┘                               │");
-    System.out.println("   │                                                                     │");
-    System.out.println("   │                                                                     │");
-    System.out.println("   └─────────────────────────────────────────────────────────────────────┘");
-    System.out.println("   ┌─────────────────────────────────────────────────────────────────────┐");
-    for (int i = 0; i < players.size(); i++) {
-      System.out.print("   │");
-      displayPlayer(players.get(i).getPlayer());
-    }
-    System.out.println("   └─────────────────────────────────────────────────────────────────────┘");
-    System.out.println("  ┌───────────────────────────────────────────────────────────────────────┐");
-    System.out.println("  │ Instructions: Enter your bet and commands (hit, stand, etc.)          │");
-    System.out.println("  └───────────────────────────────────────────────────────────────────────┘");
-  }
-
-  private void displayPlayer(Player player) {
-    System.out.print(" " + player.getName().substring(0, Math.min(6, player.getName().length())) + " ");
-    System.out.print("│ " + String.format("%-21s", player.toString()) + "│");
-    displayHand(player);
-  }
-
-  private void displayHand(Player player) {
-    Stack<Card> hand = player.getHand();
-    Node<Card> current = hand.getTop();
-    for (int i = 0; i < hand.getSize(); i++) {
-      if (current.getData().isFaceUp()) {
-        System.out.print("│ " + current.getData().toString() + " ");
-      } else {
-        System.out.print("│ Face Down ");
-      }
-      current = current.getNext();
-    }
-    System.out.println("│");
   }
 
 }

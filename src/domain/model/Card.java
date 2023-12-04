@@ -41,7 +41,7 @@ public class Card {
     @Override
     public String toString() {
         if (isFaceUp) {
-            return "│ " + value + " " + suit + " │";
+            return "│ " + value + " " + suit.getSymbol() + " │";
         } else {
             return "│ Face Down │";
         }
