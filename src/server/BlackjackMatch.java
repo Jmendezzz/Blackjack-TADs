@@ -1,14 +1,20 @@
 package server;
 
 import datastructures.CircularLinkedList;
+import datastructures.Node;
+import domain.model.Dealer;
 import server.sockets.PlayerSocket;
 
 public class BlackjackMatch{
 
   private final CircularLinkedList<PlayerSocket> players;
+  private Node<PlayerSocket> currentPlayer;
+  private final Dealer dealer;
 
   BlackjackMatch(CircularLinkedList<PlayerSocket> players) {
     this.players = players;
+    this.dealer = new Dealer();
+    this.currentPlayer = players.getHead();
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       Thread thread = new Thread(playerSocket::waiting);
@@ -18,8 +24,26 @@ public class BlackjackMatch{
   }
 
   public void startMatch(){
+    sendWelcomeMessageToPlayers();
+    dealCardsToPlayers();
+    sendToAll("Cartas repartidas");
+
+  }
+
+  private void dealCardsToPlayers(){
+    for (int i = 0; i < players.size() * 2; i++) {
+      currentPlayer.getData().getPlayer().receiveCard(dealer.deal());
+      currentPlayer = currentPlayer.getNext();
+      if(i == players.size() - 1 || i == players.size() * 2 - 1){
+        dealer.receiveCard(dealer.deal());
+      }
+    }
+  }
+
+
+  private void sendWelcomeMessageToPlayers(){
     StringBuilder message = new StringBuilder("Iniciando partida... \n" +
-                                              "Jugadores: \n");
+            "Jugadores: \n");
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       message.append(playerSocket.getPlayer().getName()).append("\n");
@@ -27,7 +51,8 @@ public class BlackjackMatch{
 
     sendToAll(message.toString());
   }
-  public void sendToAll(String message){
+
+  private void sendToAll(String message){
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       try {

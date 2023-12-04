@@ -39,4 +39,16 @@ public class CircularLinkedList<T> {
     public int size() {
         return size;
     }
+
+    public Node<T> getHead() {
+        return head;
+    }
+
+    public Node<T> getTail() {
+        return tail;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }

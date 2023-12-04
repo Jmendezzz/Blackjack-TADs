@@ -27,7 +27,7 @@ public class PlayerSocket {
   public void waiting(){
     try {
       String message = dataInputStream.readUTF();
-      System.out.println(message);
+      System.out.println("Socket player: " + message);
     } catch (Exception e) {
       System.out.println("Error handling client: " + e);
     }
