@@ -5,7 +5,8 @@ import datastructures.Stack;
 public class Player {
   private String name;
   private Double cash;
-  private Stack hand;
+  private Stack<Card> hand;
+  private int handValue;
   public Player(String name) {
     this.name = name;
   }
@@ -17,6 +18,13 @@ public class Player {
   }
   public Stack getHand() {
     return hand;
+  }
+  private void setHandValue() {
+    this.handValue = this.hand.getTotalValue();
+  }
+  public int getHandValue() {
+    setHandValue();
+    return handValue;
   }
   public String getName() {
     return name;
