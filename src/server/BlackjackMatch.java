@@ -59,13 +59,10 @@ public class BlackjackMatch{
     System.out.println("   │                                                                     │");
     System.out.println("   └─────────────────────────────────────────────────────────────────────┘");
     System.out.println("   ┌─────────────────────────────────────────────────────────────────────┐");
-    System.out.println("   │Player 1                 Player 2                 Player 3           │");
-
     for (int i = 0; i < players.size(); i++) {
       System.out.print("   │");
       displayPlayer(players.get(i).getPlayer());
     }
-
     System.out.println("   └─────────────────────────────────────────────────────────────────────┘");
     System.out.println("  ┌───────────────────────────────────────────────────────────────────────┐");
     System.out.println("  │ Instructions: Enter your bet and commands (hit, stand, etc.)          │");

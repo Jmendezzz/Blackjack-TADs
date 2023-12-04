@@ -5,10 +5,11 @@ import datastructures.Stack;
 public class Player {
   private String name;
   private Double cash;
-  private Stack<Card> hand;
+  private final Stack<Card> hand;
   private int handValue;
   private Double bet;
   public Player(String name) {
+    this.hand = new Stack<>();
     this.name = name;
     this.bet = 0.0;
     this.cash = 500.0;
@@ -29,12 +30,15 @@ public class Player {
     setHandValue();
     return handValue;
   }
-  public Double setBet(Double amount) {
-    if (amount > cash) {
+  public void setBet(Double bet) {
+    this.bet = bet;
+  }
+  public Double Bet() {
+    if (bet > cash) {
       return null;
     }
-    cash -= amount;
-    return amount;
+    cash -= bet;
+    return bet;
   }
   public Double getBet() {
     return bet;
