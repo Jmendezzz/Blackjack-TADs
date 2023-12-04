@@ -40,7 +40,6 @@ public class BlackjackClient {
     }
     private void setPlayer(String name){
         this.player = new Player(name);
-        this.player.setCash(500.0);
     }
     public Player getPlayer() {
         return player;

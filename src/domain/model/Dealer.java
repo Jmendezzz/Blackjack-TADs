@@ -12,6 +12,9 @@ public class Dealer {
         this.deck = new Deck();
     }
     public void receiveCard(Card card) {
+        if (hand.getSize() == 1) {
+            card.setFaceUp(false);
+        }
         hand.push(card);
     }
     public Stack<Card> getHand() {
