@@ -12,7 +12,7 @@ public class Card {
         this.name = name;
         this.suit = suit;
         this.value = pointValue;
-        this.isFaceUp = false;
+        this.isFaceUp = true;
     }
 
     public String getName() {
@@ -40,6 +40,10 @@ public class Card {
     }
     @Override
     public String toString() {
-        return name;
+        if (isFaceUp) {
+            return "│ " + value + " " + suit + " │";
+        } else {
+            return "│ Face Down │";
+        }
     }
 }

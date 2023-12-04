@@ -4,6 +4,7 @@ import datastructures.CircularLinkedList;
 import datastructures.Node;
 import domain.model.Dealer;
 import server.sockets.PlayerSocket;
+import server.utils.BlackjackTableUtil;
 
 public class BlackjackMatch{
 
@@ -26,8 +27,6 @@ public class BlackjackMatch{
   public void startMatch(){
     sendWelcomeMessageToPlayers();
     dealCardsToPlayers();
-    sendToAll("Cartas repartidas");
-
   }
 
   private void dealCardsToPlayers(){
@@ -37,6 +36,7 @@ public class BlackjackMatch{
       if(i == players.size() - 1 || i == players.size() * 2 - 1){
         dealer.receiveCard(dealer.deal());
       }
+      sendToAll(BlackjackTableUtil.displayTable(dealer, players));
     }
   }
 

@@ -23,6 +23,9 @@ public class Stack<T> {
         }
         return top.getData();
     }
+    public Node<T> getTop() {
+        return top;
+    }
     public int getTotalValue() {
         int total = 0;
         Node<T> current = top;
@@ -41,6 +44,15 @@ public class Stack<T> {
             current = current.getNext();
         }
         return total;
+    }
+    public int getSize(){
+        int size = 0;
+        Node<T> current = top;
+        while (current != null) {
+            size++;
+            current = current.getNext();
+        }
+        return size;
     }
     public void clear() {
         top = null;
