@@ -1,15 +1,17 @@
-package model;
+package domain.model;
+
+import domain.enums.Suit;
 
 public class Card {
-    private String name;
-    private String suit;
-    private int pointValue;
+    private final String name;
+    private final Suit suit;
+    private int value;
     private boolean isFaceUp;
 
-    public Card(String name, String suit, int pointValue) {
+    public Card(String name, Suit suit, int pointValue) {
         this.name = name;
         this.suit = suit;
-        this.pointValue = pointValue;
+        this.value = pointValue;
         this.isFaceUp = false;
     }
 
@@ -17,12 +19,16 @@ public class Card {
         return name;
     }
 
-    public String getSuit() {
+    public Suit getSuit() {
         return suit;
     }
 
-    public int getPointValue() {
-        return pointValue;
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public boolean isFaceUp() {
@@ -32,12 +38,6 @@ public class Card {
     public void setFaceUp(boolean faceUp) {
         isFaceUp = faceUp;
     }
-
-    public String getRank() {
-        // Devuelve el valor de la carta "2", "A", "K"
-        return name.split(" ")[0];
-    }
-
     @Override
     public String toString() {
         return name;

@@ -1,4 +1,4 @@
-package model;
+package domain.model;
 
 import datastructures.Stack;
 
@@ -18,13 +18,16 @@ public class Player {
   public Stack getHand() {
     return hand;
   }
-  public void setHand(Stack hand) {
-    this.hand = hand;
-  }
   public String getName() {
     return name;
   }
   public void setName(String name) {
     this.name = name;
+  }
+  public void receiveCard(Card card) {
+    hand.push(card);
+  }
+  public void clearHand() {
+    hand.clear();
   }
 }

@@ -1,7 +1,7 @@
 package server;
 
 import datastructures.CircularLinkedList;
-import model.Player;
+import domain.model.Player;
 import server.sockets.PlayerSocket;
 
 import java.io.DataInputStream;

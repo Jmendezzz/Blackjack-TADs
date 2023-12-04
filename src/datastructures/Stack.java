@@ -1,5 +1,7 @@
 package datastructures;
 
+import domain.model.Card;
+
 public class Stack<T> {
     private Node<T> top;
     public void push(T data) {
@@ -15,7 +17,32 @@ public class Stack<T> {
         top = top.getNext();
         return data;
     }
-    public void delete() {
+    public T peek() {
+        if (top == null) {
+            return null;
+        }
+        return top.getData();
+    }
+    public int getTotalValue() {
+        int total = 0;
+        Node<T> current = top;
+        while (current != null) {
+            Card card = (Card) current.getData();
+            if (card.getName().equalsIgnoreCase("A")){
+                if (total + 11 > 21) {
+                    total += 1;
+                } else {
+                    total += 11;
+                }
+            } else {
+                total += card.getValue();
+            }
+            total += card.getValue();
+            current = current.getNext();
+        }
+        return total;
+    }
+    public void clear() {
         top = null;
     }
 }

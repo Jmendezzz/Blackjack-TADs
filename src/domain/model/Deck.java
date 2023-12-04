@@ -1,44 +1,47 @@
-package model;
+package domain.model;
+
+import datastructures.Stack;
+import domain.enums.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-    private List<Card> cards;
-
+    private final List<Card> cards;
+    private final Stack<Card> cardStack;
     public Deck() {
+        this.cardStack = new Stack<>();
         this.cards = generateDeck();
         shuffle();
+        for (Card card : cards) {
+            cardStack.push(card);
+        }
     }
 
     private List<Card> generateDeck() {
         List<Card> deck = new ArrayList<>();
-        String[] suits = {"Corazones", "Diamantes", "Tréboles", "Picas"};
         String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
-
-        for (String suit : suits) {
+        for (Suit suit : Suit.values()) {
             for (String rank : ranks) {
                 int value = getValue(rank);
                 String cardName = rank + " de " + suit;
                 deck.add(new Card(cardName, suit, value));
             }
         }
-
         return deck;
     }
 
     private int getValue(String rank) {
-        switch (rank) {
-            case "A":
-                return 11;
-            case "K":
-            case "Q":
-            case "J":
-                return 10;
-            default:
-                return Integer.parseInt(rank);
-        }
+        return switch (rank) {
+            case "A" -> 11;
+            case "K", "Q", "J" -> 10;
+            default -> Integer.parseInt(rank);
+        };
+    }
+
+    public Stack<Card> getCardStack() {
+        return cardStack;
     }
 
     public void shuffle() {
@@ -46,10 +49,18 @@ public class Deck {
     }
 
     public Card dealCard() {
-        if (cards.isEmpty()) {
-            throw new IllegalStateException("La baraja esta vacia, no se pueden repartir mas cartas.");
+        if (cardStack.peek() == null) {
+            reset();
         }
-        return cards.remove(0);
+        return cardStack.pop();
+    }
+
+    public void reset() {
+        cardStack.clear();
+        shuffle();
+        for (Card card : cards) {
+            cardStack.push(card);
+        }
     }
 
     public int size() {

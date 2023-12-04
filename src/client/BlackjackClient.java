@@ -1,10 +1,9 @@
 package client;
 
-import model.Player;
+import domain.model.Player;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URI;
 import java.util.Scanner;
 
 public class BlackjackClient {
@@ -42,6 +41,9 @@ public class BlackjackClient {
     private void setPlayer(String name){
         this.player = new Player(name);
         this.player.setCash(500.0);
+    }
+    public Player getPlayer() {
+        return player;
     }
     private void listenToServer() {
         try {
