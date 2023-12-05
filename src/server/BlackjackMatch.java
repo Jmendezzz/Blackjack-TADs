@@ -4,7 +4,6 @@ import datastructures.CircularLinkedList;
 import datastructures.Node;
 import domain.enums.ServerInteraction;
 import domain.model.Dealer;
-import server.service.PlayerAction;
 import server.sockets.PlayerSocket;
 import server.utils.BlackjackTableUtil;
 
@@ -18,11 +17,6 @@ public class BlackjackMatch{
     this.players = players;
     this.dealer = new Dealer();
     this.currentPlayer = players.getHead();
-    for (int i = 0; i < players.size(); i++) {
-      PlayerSocket playerSocket = players.get(i);
-      Thread thread = new Thread(playerSocket::waiting);
-      thread.start();
-    }
     startMatch();
   }
 
@@ -39,12 +33,14 @@ public class BlackjackMatch{
       if(i == players.size() - 1 || i == players.size() * 2 - 1){
         dealer.receiveCard(dealer.deal());
       }
-      sendToAll(BlackjackTableUtil.displayTable(dealer, players));
     }
+    sendToAll(BlackjackTableUtil.displayTable(dealer, players));
   }
   private void selectTurn() {
     try {
-      currentPlayer.getData().getDataOutputStream().writeObject(ServerInteraction.TURN.toString());
+      String turn = ServerInteraction.TURN.toString();
+      currentPlayer.getData().getDataOutputStream().writeObject(turn);
+      currentPlayer.getData().getDataOutputStream().flush();
     } catch (Exception e) {
       System.out.println("Error sending message to client: " + e);
     }
@@ -61,6 +57,28 @@ public class BlackjackMatch{
 
     sendToAll(message.toString());
   }
+  public void waiting(PlayerSocket playerSocket) {
+    while (!playerSocket.getSocket().isClosed()) {
+      try {
+        Object object = playerSocket.getDataInputStream().readObject();
+
+        if (object instanceof String message) {
+          System.out.println("Socket player: " + message);
+        } else {
+          // Handle unexpected object type, or ignore if it's intentional
+          System.out.println("Received unexpected object type");
+        }
+      } catch (Exception e) {
+        try {
+          playerSocket.getSocket().close();
+        } catch (Exception ex) {
+          System.out.println("Error closing socket: " + ex);
+        }
+        System.out.println("Error handling client here: " + e);
+
+      }
+    }
+  }
 
   private void sendToAll(String message){
     for (int i = 0; i < players.size(); i++) {
@@ -68,6 +86,8 @@ public class BlackjackMatch{
       try {
         playerSocket.getDataOutputStream().writeObject(message);
         playerSocket.getDataOutputStream().flush();
+
+
       } catch (Exception e) {
         System.out.println("Error sending message to client: " + e);
       }

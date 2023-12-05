@@ -11,7 +11,7 @@ import java.net.Socket;
 
 
 public class BlackjackServer {
-  public static final int PORT = 8080;
+  public static final int PORT = 8087;
   public static CircularLinkedList<PlayerSocket> players = new CircularLinkedList<PlayerSocket>();
   public static void main(String[] args) {
     try {
@@ -36,10 +36,9 @@ public class BlackjackServer {
         PlayerSocket player = new PlayerSocket(new Player(name),socket,out, in);
         players.add(player);
 
-        String message = new String("Welcome!  " + name + " to the Blackjack game" +
+        String message = "Welcome!  " + name + " to the Blackjack game" +
                 "\n" + "Waiting for other players..." +
-                "\n" + "Connected players: " + players.size() + "/5"
-        );
+                "\n" + "Connected players: " + players.size() + "/5";
         out.writeObject(message);
         out.flush();
 

@@ -17,15 +17,6 @@ public class PlayerSocket {
     this.dataOutputStream = dataOutputStream;
     this.dataInputStream = dataInputStream;
   }
-  public void waiting(){
-    try {
-      String message = dataInputStream.readUTF();
-      System.out.println("Socket player: " + message);
-    } catch (Exception e) {
-      System.out.println("Error handling client: " + e);
-    }
-  }
-
   public Player getPlayer() {
     return player;
   }

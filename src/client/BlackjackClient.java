@@ -31,12 +31,10 @@ public class BlackjackClient {
             String name = scanner.next();
             socket = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(socket.getOutputStream());
-            out.flush();
             in = new ObjectInputStream(socket.getInputStream());
             Thread serverListenerThread = new Thread(this::listenToServer);
             serverListenerThread.start();
 
-            Thread.sleep(1000);
             out.writeUTF(name);
             out.flush();
 
@@ -97,6 +95,11 @@ public class BlackjackClient {
             }else {
                 handleServerMessage(message);
             }
+        }
+        try{
+            out.reset();
+        }catch (IOException e){
+            System.out.println("Error resetting output stream: " + e);
         }
     }
 }
