@@ -8,14 +8,15 @@ import server.service.PlayerAction;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.EnumSet;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BlackjackClient {
     private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
-    private ObjectInputStream objectIn;
-    private ObjectOutputStream objectOut;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private Player player;
     Scanner scanner = new Scanner(System.in);
 
@@ -29,10 +30,9 @@ public class BlackjackClient {
             System.out.println("Enter your name: ");
             String name = scanner.next();
             socket = new Socket(serverAddress, serverPort);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
-            objectIn = new ObjectInputStream(socket.getInputStream());
-            objectOut = new ObjectOutputStream(socket.getOutputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
+            in = new ObjectInputStream(socket.getInputStream());
             Thread serverListenerThread = new Thread(this::listenToServer);
             serverListenerThread.start();
 
@@ -55,9 +55,7 @@ public class BlackjackClient {
     private void listenToServer() {
         try {
             while (true) {
-                String messageFromServer = in.readUTF();
-                handleServerMessage(messageFromServer);
-                Object object = objectIn.readObject();
+                Object object = in.readObject();
                 handleServerObject(object);
             }
         } catch (IOException e) {
@@ -80,11 +78,24 @@ public class BlackjackClient {
         }
     }
     public void handleServerObject(Object object){
-        PlayerActionsFactory factory = new PlayerFactoryImpl(objectOut);
-        if (object instanceof ServerInteraction serverInteraction){
-            PlayerAction action = factory.createPlayerAction(serverInteraction);
-            if (action != null) {
-                action.execute();
+        PlayerActionsFactory factory = new PlayerFactoryImpl(out);
+        if(object instanceof String message){
+            Set<String> validInteractions = EnumSet.allOf(ServerInteraction.class).stream()
+                                                    .map(Enum::toString)
+                                                    .collect(Collectors.toSet());
+
+            if (validInteractions.contains(message)) {
+
+                ServerInteraction serverInteraction = ServerInteraction.valueOf(message);
+                if (serverInteraction.equals(ServerInteraction.TURN)) {
+                    PlayerAction action = factory.createPlayerAction(serverInteraction);
+                    if (action != null) {
+                        action.execute();
+                    }
+                }
+
+            }else {
+                handleServerMessage(message);
             }
         }
     }

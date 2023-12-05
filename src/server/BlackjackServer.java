@@ -1,11 +1,11 @@
 package server;
 
 import datastructures.CircularLinkedList;
+import domain.model.Dealer;
 import domain.model.Player;
 import server.sockets.PlayerSocket;
 
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -29,17 +29,20 @@ public class BlackjackServer {
   public static void handleClient(Socket socket) {
 
     try {
-        DataInputStream in = new DataInputStream(socket.getInputStream());
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         String name = in.readUTF();
         System.out.println("Client connected: " + name);
-        PlayerSocket player = new PlayerSocket(new Player(name),socket);
+        PlayerSocket player = new PlayerSocket(new Player(name),socket,out, in);
         players.add(player);
-        player.getDataOutputStream()
-              .writeUTF("Welcome!  " + name + " to the Blackjack game" +
-                      "\n" + "Waiting for other players..." +
-                      "\n" + "Connected players: " + players.size() + "/5"
-              );
-        player.getDataOutputStream().flush();
+
+        String message = new String("Welcome!  " + name + " to the Blackjack game" +
+                "\n" + "Waiting for other players..." +
+                "\n" + "Connected players: " + players.size() + "/5"
+        );
+        out.writeObject(message);
+        out.flush();
+
     } catch (IOException e) {
       System.out.println("Error handling client: " + e);
     }finally {

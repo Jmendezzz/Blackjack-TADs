@@ -2,27 +2,20 @@ package server.sockets;
 
 import domain.model.Player;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class PlayerSocket {
   private Player player;
   private Socket socket;
-  private DataInputStream dataInputStream;
-  private DataOutputStream dataOutputStream;
+  private ObjectOutputStream dataOutputStream;
+  private ObjectInputStream dataInputStream;
 
-  public PlayerSocket(Player player,Socket socket) {
+  public PlayerSocket(Player player,Socket socket, ObjectOutputStream dataOutputStream, ObjectInputStream dataInputStream) {
     this.player = player;
     this.socket = socket;
-    try{
-      this.dataInputStream = new DataInputStream(socket.getInputStream());
-      this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-    }catch (IOException ioException){
-      System.out.println("Error getting input/output stream: " + ioException);
-    }
-
+    this.dataOutputStream = dataOutputStream;
+    this.dataInputStream = dataInputStream;
   }
   public void waiting(){
     try {
@@ -47,20 +40,19 @@ public class PlayerSocket {
     this.player = player;
   }
 
-  public DataInputStream getDataInputStream() {
+  public ObjectInputStream getDataInputStream() {
     return dataInputStream;
   }
 
-  public void setDataInputStream(DataInputStream dataInputStream) {
+  public void setDataInputStream(ObjectInputStream dataInputStream) {
     this.dataInputStream = dataInputStream;
   }
 
-  public DataOutputStream getDataOutputStream() {
+  public ObjectOutputStream getDataOutputStream() {
     return dataOutputStream;
   }
 
-  public void setDataOutputStream(DataOutputStream dataOutputStream) {
+  public void setDataOutputStream(ObjectOutputStream dataOutputStream) {
     this.dataOutputStream = dataOutputStream;
   }
-
 }

@@ -2,7 +2,9 @@ package server;
 
 import datastructures.CircularLinkedList;
 import datastructures.Node;
+import domain.enums.ServerInteraction;
 import domain.model.Dealer;
+import server.service.PlayerAction;
 import server.sockets.PlayerSocket;
 import server.utils.BlackjackTableUtil;
 
@@ -27,6 +29,7 @@ public class BlackjackMatch{
   public void startMatch(){
     sendWelcomeMessageToPlayers();
     dealCardsToPlayers();
+    selectTurn();
   }
 
   private void dealCardsToPlayers(){
@@ -37,6 +40,13 @@ public class BlackjackMatch{
         dealer.receiveCard(dealer.deal());
       }
       sendToAll(BlackjackTableUtil.displayTable(dealer, players));
+    }
+  }
+  private void selectTurn() {
+    try {
+      currentPlayer.getData().getDataOutputStream().writeObject(ServerInteraction.TURN.toString());
+    } catch (Exception e) {
+      System.out.println("Error sending message to client: " + e);
     }
   }
 
@@ -56,7 +66,7 @@ public class BlackjackMatch{
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       try {
-        playerSocket.getDataOutputStream().writeUTF(message);
+        playerSocket.getDataOutputStream().writeObject(message);
         playerSocket.getDataOutputStream().flush();
       } catch (Exception e) {
         System.out.println("Error sending message to client: " + e);

@@ -1,5 +1,5 @@
 package domain.enums;
 
-public enum ServerInteraction {
+public enum ServerInteraction  {
     TURN
 }
