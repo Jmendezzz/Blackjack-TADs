@@ -9,9 +9,9 @@ public class BlackjackTableUtil {
   public static String displayTable(Dealer dealer, CircularLinkedList<PlayerSocket> players) {
     StringBuilder table = new StringBuilder();
 
-    table.append("╔════════════════════════════════════════════════╗\n");
-    table.append("║                 Blackjack Table                ║\n");
-    table.append("╚════════════════════════════════════════════════╝\n\n");
+    table.append("╔══════════════════════════╗\n");
+    table.append("║            Blackjack Table           ║\n");
+    table.append("╚══════════════════════════╝\n\n");
 
     table.append("Dealer's Hand:\n");
     table.append(dealer.displayHand());

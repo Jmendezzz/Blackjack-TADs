@@ -20,14 +20,16 @@ public class PlayerActionImpl implements PlayerAction {
                 "Your turn", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, playerInteractions, playerInteractions[0]);
         if (opt == 0) {
             try {
-                objectOut.writeObject(PlayerInteraction.HIT);
+                String playerInteraction = PlayerInteraction.HIT.toString();
+                objectOut.writeObject(playerInteraction);
                 objectOut.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else{
             try {
-                objectOut.writeObject(PlayerInteraction.STAND);
+                String playerInteraction = PlayerInteraction.STAND.toString();
+                objectOut.writeObject(playerInteraction);
                 objectOut.flush();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -25,8 +25,7 @@ public class Deck {
         for (Suit suit : Suit.values()) {
             for (String rank : ranks) {
                 int value = getValue(rank);
-                String cardName = rank + " de " + suit;
-                deck.add(new Card(cardName, suit, value));
+                deck.add(new Card(rank, suit, value));
             }
         }
         return deck;
