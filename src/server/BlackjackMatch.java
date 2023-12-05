@@ -42,8 +42,8 @@ public class BlackjackMatch{
 
 
   private void sendWelcomeMessageToPlayers(){
-    StringBuilder message = new StringBuilder("Iniciando partida... \n" +
-            "Jugadores: \n");
+    StringBuilder message = new StringBuilder("Starting match... \n" +
+            "Players: \n");
     for (int i = 0; i < players.size(); i++) {
       PlayerSocket playerSocket = players.get(i);
       message.append(playerSocket.getPlayer().getName()).append("\n");

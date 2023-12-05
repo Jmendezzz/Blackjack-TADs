@@ -35,9 +35,9 @@ public class BlackjackServer {
         PlayerSocket player = new PlayerSocket(new Player(name),socket);
         players.add(player);
         player.getDataOutputStream()
-              .writeUTF("Bienvenido " + name + " al juego de Blackjack" +
-                      "\n" + "Esperando a que se conecten los demas jugadores..." +
-                      "\n" + "Jugadores conectados: " + players.size() + "/5"
+              .writeUTF("Welcome!  " + name + " to the Blackjack game" +
+                      "\n" + "Waiting for other players..." +
+                      "\n" + "Connected players: " + players.size() + "/5"
               );
         player.getDataOutputStream().flush();
     } catch (IOException e) {

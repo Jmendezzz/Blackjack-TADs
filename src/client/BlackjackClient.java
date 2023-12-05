@@ -20,7 +20,7 @@ public class BlackjackClient {
     }
     private void connect(String serverAddress, int serverPort){
         try {
-            System.out.println("Ingresa tú nombre: ");
+            System.out.println("Enter your name: ");
             String name = scanner.next();
             socket = new Socket(serverAddress, serverPort);
             in = new DataInputStream(socket.getInputStream());
