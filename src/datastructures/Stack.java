@@ -40,7 +40,6 @@ public class Stack<T> {
             } else {
                 total += card.getValue();
             }
-            total += card.getValue();
             current = current.getNext();
         }
         return total;
