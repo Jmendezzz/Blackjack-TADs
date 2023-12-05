@@ -1,6 +1,10 @@
 package client;
 
+import domain.enums.ServerInteraction;
 import domain.model.Player;
+import infraestructure.factory.PlayerActionsFactory;
+import infraestructure.factory.impl.PlayerFactoryImpl;
+import server.service.PlayerAction;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,6 +14,8 @@ public class BlackjackClient {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private ObjectInputStream objectIn;
+    private ObjectOutputStream objectOut;
     private Player player;
     Scanner scanner = new Scanner(System.in);
 
@@ -25,6 +31,8 @@ public class BlackjackClient {
             socket = new Socket(serverAddress, serverPort);
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
+            objectIn = new ObjectInputStream(socket.getInputStream());
+            objectOut = new ObjectOutputStream(socket.getOutputStream());
             Thread serverListenerThread = new Thread(this::listenToServer);
             serverListenerThread.start();
 
@@ -49,10 +57,14 @@ public class BlackjackClient {
             while (true) {
                 String messageFromServer = in.readUTF();
                 handleServerMessage(messageFromServer);
+                Object object = objectIn.readObject();
+                handleServerObject(object);
             }
         } catch (IOException e) {
             close();
             System.out.println("Error reading from server: " + e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     private void handleServerMessage(String message) {
@@ -65,6 +77,15 @@ public class BlackjackClient {
             socket.close();
         } catch (IOException e) {
             System.out.println("Error closing resources: " + e);
+        }
+    }
+    public void handleServerObject(Object object){
+        PlayerActionsFactory factory = new PlayerFactoryImpl(objectOut);
+        if (object instanceof ServerInteraction serverInteraction){
+            PlayerAction action = factory.createPlayerAction(serverInteraction);
+            if (action != null) {
+                action.execute();
+            }
         }
     }
 }
